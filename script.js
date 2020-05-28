@@ -4,7 +4,6 @@ const shuffle = (array) => {
 };
 
 
-
 const wordsDefault = [
   "аэропОрты",
   "балОванный",
@@ -294,6 +293,8 @@ const wordsDefault = [
   "экспЕрт",
 ];
 
+const vowels = ["у", "е", "ы", "а", "о", "э", "ё", "я", "и", "ю"];
+
 
 let words = null;
 
@@ -304,6 +305,8 @@ const uploadToStorage = () => {
 
 const init = () => {
   words = JSON.parse(localStorage.getItem("words"));
+  boxRight.style.display = "none";
+  boxWrong.style.display = "none";
 };
 
 
@@ -313,21 +316,76 @@ const resetWordsLists = () => {
 };
 
 
-const chooseWordIndex = (words) => {
-  return Math.ceil(Math.random() * words.length);
+const chooseWordIndex = () => {
+  return Math.floor(Math.random() * words.length);
 };
 
 
 const removeWord = (index) => {
   words.splice(index, 1);
+  uploadToStorage();
 };
 
 
+const constructWord = (index) => {
+  let word = words[index];
+  let html = "";
+
+  for (let i in word) {
+    let letter = word[i];
+    if (letter == letter.toUpperCase()) {
+      html += `<span onclick="animationRight('${word}'); removeWord(${index})">${letter == "Ё" ? "е" : letter.toLowerCase()}</span>`;
+    } else if (vowels.includes(letter)) {
+      html += `<span onclick="animationWrong('${word}')">${letter}</span>`;
+    } else {
+      html += letter;
+    }
+  }
+
+  return html;
+};
+
+
+const animationRight = (right) => {
+  boxRight.style.display = "flex";
+  boxRightWord.innerHTML = right;
+  boxLog.innerHTML += `<p>${right}, ${words.length - 1}</p>`;
+};
+
+const animationWrong = (right) => {
+  boxWrong.style.display = "flex";
+  boxWrongWord.innerHTML = right;
+  boxLog.innerHTML += `<p>${right}, ${words.length - 1}</p>`;
+};
+
+const nextWord = () => {
+  if (words.length == 0) {
+    resetWordsLists();
+  }
+  divWord.innerHTML = constructWord(chooseWordIndex());
+};
+
+
+const resume = () => {
+  nextWord();
+  boxRight.style.display = "none";
+  boxWrong.style.display = "none";
+};
+
 // ---
+
+let divWord = document.getElementById("word");
+let boxRight = document.getElementById("boxRight");
+let boxWrong = document.getElementById("boxWrong");
+let boxRightWord = document.getElementById("boxRightWord");
+let boxWrongWord = document.getElementById("boxWrongWord");
+let boxLog = document.getElementById("log");
 
 if (localStorage.getItem("words") === null) {
   resetWordsLists();
 }
 
 init();
+
+resume();
 

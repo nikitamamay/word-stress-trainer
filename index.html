@@ -1,10 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Word Stress Trainer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      height: 100%;
+      font-family: sans-serif;
+    }
+    .central {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #word {
+      font-size: 50px;
+      font-family: sans-serif;
+    }
+    #word span {
+      cursor: pointer;
+    }
+    #word span:hover {
+      outline: 1px solid gray;
+    }
+
+    #log {
+      position: absolute;
+      padding: 10px;
+      font-size: 15px;
+      bottom: 0;
+      left: 0;
+      color: gray;
+      z-index: -1;
+    }
+
+    .modal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+    }
+
+    .modal {
+      padding: 30px;
+      background-color: white;
+      text-align: center;
+      font-size: 50px;
+    }
+    .animation {
+      animation: aOpacity 0.1s;
+    }
+
+    #boxRight .heading {
+      color: green;
+    }
+    #boxWrong .heading {
+      color: red;
+    }
+
+    @keyframes aOpacity {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="central">
+
+
+  <div id="word"></div>
+
+  <div id="log"></div>
+
+  <div style="display: none;" class="modal-bg animation central" id="boxRight" onclick="resume()">
+    <div class="modal">
+      <p class="heading">Верно!</p>
+      <p id="boxRightWord"></p>
+    </div>
+  </div>
+  <div style="display: none;" class="modal-bg animation central" id="boxWrong" onclick="resume()">
+    <div class="modal">
+      <p class="heading">Неправильно!</p>
+      <p id="boxWrongWord"></p>
+    </div>
+  </div>
 
 
   <script src="script.js"></script>
